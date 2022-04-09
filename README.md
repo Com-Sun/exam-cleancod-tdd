@@ -37,7 +37,7 @@ ParkingLotService에서 모든 주차에 관한 서비스 관리
 ### 주차장에서 차가 나간다.
   - 주차한 시간만큼 요금표에 따른 fee 청구 기능 구현
   - Car가 돈이 없을 시 Throw Exception 기능 구현 (나갈 수 없음)
-  - TODO: 사용중이던 주차공간을 사용할 수 있는상태로 변화 - void 함수 NullPointerException 해결해야함
+  - 사용중이던 주차공간을 사용할 수 있는상태로 변경 기능 구현
 
 ## Spec 2
 

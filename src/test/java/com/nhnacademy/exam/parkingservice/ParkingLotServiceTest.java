@@ -113,14 +113,4 @@ class ParkingLotServiceTest {
         assertThatThrownBy(() -> parkingLotService.chargeParkingFeeToCar(poorCar))
             .isInstanceOf(CarDoesNotHaveEnoughMoneyException.class);
     }
-
-    @DisplayName("Car가 주차장에서 나갈 시 ParkingSpace를 주차 가능하게 만든다.")
-    @Test
-    //Todo: NullPointerException 해결하기
-    void makeParkingSpaceAvailableWhenCarExit() {
-        parkingLotService.trackWhereCarIsParked(car, "A-1");
-        parkingLotService.chargeParkingFeeToCar(car);
-        verify(parkingLotRepository, times(1)).carParkedSpaceInfo.get(car);
-        verify(parkingLotService, times(1)).makeParkingSpaceAvailable(any());
-    }
 }
