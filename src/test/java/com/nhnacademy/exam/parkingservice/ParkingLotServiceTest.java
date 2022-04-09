@@ -2,7 +2,10 @@ package com.nhnacademy.exam.parkingservice;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.nhnacademy.exam.car.Car;
@@ -33,6 +36,8 @@ class ParkingLotServiceTest {
         parkingLotService.scanCarNumber(car);
         when(parkingLotRepository.getCarNumber(car)).thenReturn(car.getCarNumber());
         assertThat(parkingLotRepository.getCarNumber(car)).isEqualTo(1838);
+
+        // 메소드를 호출했는지
     }
 
     @DisplayName("A-1에 주차했을 경우 주차할 수 있는지의 여부를 확인한다.")
@@ -47,7 +52,8 @@ class ParkingLotServiceTest {
     void parkingAreaExceptionTest() {
         parkingLotService.trackWhereCarIsParked(car, "A-1");
         assertThatThrownBy(
-            () -> parkingLotService.trackWhereCarIsParked(new Car(CarType.SUV, 1123, new Money(Currency.WON, 3000)), "A-1"))
+            () -> parkingLotService.trackWhereCarIsParked(
+                new Car(CarType.SUV, 1123, new Money(Currency.WON, 3000)), "A-1"))
             .isInstanceOf(ParkingSpaceIsAlreadyUsedException.class);
     }
 
@@ -106,8 +112,15 @@ class ParkingLotServiceTest {
                 Duration.between(LocalDateTime.of(0, 1, 1, 0, 0), LocalDateTime.of(0, 1, 2, 0, 1)));
         assertThatThrownBy(() -> parkingLotService.chargeParkingFeeToCar(poorCar))
             .isInstanceOf(CarDoesNotHaveEnoughMoneyException.class);
-
-
     }
 
+    @DisplayName("Car가 주차장에서 나갈 시 ParkingSpace를 주차 가능하게 만든다.")
+    @Test
+    //Todo: NullPointerException 해결하기
+    void makeParkingSpaceAvailableWhenCarExit() {
+        parkingLotService.trackWhereCarIsParked(car, "A-1");
+        parkingLotService.chargeParkingFeeToCar(car);
+        verify(parkingLotRepository, times(1)).carParkedSpaceInfo.get(car);
+        verify(parkingLotService, times(1)).makeParkingSpaceAvailable(any());
+    }
 }

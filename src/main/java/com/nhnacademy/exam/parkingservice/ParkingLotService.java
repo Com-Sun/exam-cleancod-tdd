@@ -26,6 +26,7 @@ public class ParkingLotService {
             }
         } catch (NullPointerException e) {
         }
+        this.parkingLotRepository.saveWhereCarIsParked(car, code);
         parkingSpace.put(code, false);
     }
 
@@ -56,5 +57,10 @@ public class ParkingLotService {
             return fee + 10000;
         }
         return 10000;
+    }
+
+    public void makeParkingSpaceAvailable(Car car) {
+        String code = parkingLotRepository.carParkedSpaceInfo.get(car);
+        parkingSpace.put(code, true);
     }
 }
