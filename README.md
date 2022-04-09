@@ -1,6 +1,8 @@
+# 개요
+
 ## ParkingLotService
 
-- parkingSpace: 주차공간을 관리하는 Map<String, Booleadn>타입 속성
+- parkingSpace: 주차공간을 관리하는 Map<String, Boolean>타입 속성
 - parkingLotRepository: 외부에서 주입
 
 ---
@@ -11,6 +13,7 @@ ParkingLotService에서 모든 주차에 관한 서비스 관리
 - trackWhereCarIsParked()
 - isParkingSpaceAvailable()
 - chargeParkingFeeToCar()
+  - calculateParkingFeeOfCar()
 
 ## ParkingLotRepository
 
@@ -22,6 +25,8 @@ ParkingLotService에서 모든 주차에 관한 서비스 관리
 - getHowLongCarIsParked()
 
 
+# 기능 구현
+
 ## Spec 1
 
 ### 주차장에 차가 들어온다.
@@ -30,8 +35,8 @@ ParkingLotService에서 모든 주차에 관한 서비스 관리
   - 만약 A-1이 사용중이라면 Throw Exception 기능 구현
   - 아니라면 A-1을 사용중인 상태로 만드는 기능 구현
 ### 주차장에서 차가 나간다.
-  - 주차한 시간만큼 요금표에 따른 fee 청구
-  - TODO: Car가 돈이 없을 시 나갈 수 없음. (Car에 Money속성 필요)
+  - 주차한 시간만큼 요금표에 따른 fee 청구 기능 구현
+  - Car가 돈이 없을 시 Throw Exception 기능 구현 (나갈 수 없음)
   - TODO: 사용중이던 주차공간을 사용할 수 있는상대로 변화
 
 ## Spec 2

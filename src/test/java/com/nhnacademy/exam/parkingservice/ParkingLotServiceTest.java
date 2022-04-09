@@ -7,6 +7,8 @@ import static org.mockito.Mockito.when;
 
 import com.nhnacademy.exam.car.Car;
 import com.nhnacademy.exam.car.CarType;
+import com.nhnacademy.exam.car.Currency;
+import com.nhnacademy.exam.car.Money;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +24,7 @@ class ParkingLotServiceTest {
     void setUp() {
         parkingLotRepository = mock(ParkingLotRepository.class);
         parkingLotService = new ParkingLotService(parkingLotRepository);
-        car = new Car(CarType.SUV, 1838);
+        car = new Car(CarType.SUV, 1838, new Money(Currency.WON, 50000));
     }
 
     @DisplayName("차가 들어오면 번호판을 인식한다.")
@@ -44,7 +46,8 @@ class ParkingLotServiceTest {
     @Test
     void parkingAreaExceptionTest() {
         parkingLotService.trackWhereCarIsParked(car, "A-1");
-        assertThatThrownBy(() -> parkingLotService.trackWhereCarIsParked(new Car(CarType.SUV, 1123), "A-1"))
+        assertThatThrownBy(
+            () -> parkingLotService.trackWhereCarIsParked(new Car(CarType.SUV, 1123, new Money(Currency.WON, 3000)), "A-1"))
             .isInstanceOf(ParkingSpaceIsAlreadyUsedException.class);
     }
 
@@ -93,4 +96,18 @@ class ParkingLotServiceTest {
                 Duration.between(LocalDateTime.of(0, 1, 1, 0, 0), LocalDateTime.of(0, 1, 2, 0, 1)));
         assertThat(parkingLotService.chargeParkingFeeToCar(car)).isEqualTo(20000);
     }
+
+    @DisplayName("Car가 돈이 없을 시 나갈 수 없음")
+    @Test
+    void carCanNotExitIfMoneyIsNotEnough() {
+        Car poorCar = new Car(CarType.SUV, 1838, new Money(Currency.WON, 3000));
+        when(parkingLotRepository.getHowLongCarIsParked(poorCar))
+            .thenReturn(
+                Duration.between(LocalDateTime.of(0, 1, 1, 0, 0), LocalDateTime.of(0, 1, 2, 0, 1)));
+        assertThatThrownBy(() -> parkingLotService.chargeParkingFeeToCar(poorCar))
+            .isInstanceOf(CarDoesNotHaveEnoughMoneyException.class);
+
+
+    }
+
 }

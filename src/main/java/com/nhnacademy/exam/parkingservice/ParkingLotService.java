@@ -1,6 +1,8 @@
 package com.nhnacademy.exam.parkingservice;
 
 import com.nhnacademy.exam.car.Car;
+import com.nhnacademy.exam.car.Currency;
+import com.nhnacademy.exam.car.Money;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +35,13 @@ public class ParkingLotService {
 
     public int chargeParkingFeeToCar(Car car) {
         Duration duration = parkingLotRepository.getHowLongCarIsParked(car);
+        int amount = calculateParkingFeeOfCar(duration);
+        Money money = new Money(Currency.WON, amount);
+        car.payMoney(money);
+        return amount;
+    }
+
+    private int calculateParkingFeeOfCar(Duration duration) {
         if (duration.getSeconds() <= 1800L) {
             return 1000;
         }
@@ -48,5 +57,4 @@ public class ParkingLotService {
         }
         return 10000;
     }
-
 }
