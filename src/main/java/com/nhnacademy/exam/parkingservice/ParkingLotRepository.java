@@ -7,7 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ParkingLotRepository {
-    Map<Car, LocalDateTime> carInfo = new HashMap<>();
+    Map<Car, LocalDateTime> carParkedTimeInfo = new HashMap<>();
+    Map<Car, String> carParkedSpaceInfo = new HashMap<>();
 
     public int getCarNumber(Car car) {
         //TODO: 레포지토리에서 일치하는 번호판을 찾아 리턴
@@ -15,12 +16,15 @@ public class ParkingLotRepository {
     }
 
     public void saveCarInfo(Car car) {
-        carInfo.put(car, LocalDateTime.now());
+        carParkedTimeInfo.put(car, LocalDateTime.now());
     }
 
     public Duration getHowLongCarIsParked(Car car) {
-        return (Duration.between(carInfo.get(car), LocalDateTime.now()));
+        return (Duration.between(carParkedTimeInfo.get(car), LocalDateTime.now()));
     }
 
+    public void saveWhereCarIsParked(Car car, String code) {
+        carParkedSpaceInfo.put(car, code);
+    }
 }
 
