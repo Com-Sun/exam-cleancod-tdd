@@ -4,25 +4,17 @@
 
 - parkingSpace: 주차공간을 관리하는 Map<String, Boolean>타입 속성
 - parkingLotRepository: 외부에서 주입
+- ParkingFee: 평소엔 WEEKDAY 요금제 적용. WEEKEND 요금으로 변경 가능
 
 ---
 
 ParkingLotService에서 모든 주차에 관한 서비스 관리
 
-- scanCarNumber()
-- trackWhereCarIsParked()
-- isParkingSpaceAvailable()
-- chargeParkingFeeToCar()
-  - calculateParkingFeeOfCar()
-
 ## ParkingLotRepository
 
-- carInfo: 주차된 차의 정보를 관리하는 Map<Car, LocalDateTime>타입 속성
----
+- carParkedTimeInfo: 주차된 차의 시간정보를 관리하는 Map<Car, LocalDateTime>타입 속성
+- carParkedSpaceInfe: 주차된 차의 공간정보를 관리하는 Map<Car, String>타입 속성
 
-- getCarNumber()
-- saveCarInfo()
-- getHowLongCarIsParked()
 
 
 # 기능 구현
@@ -53,8 +45,10 @@ ParkingLotService에서 모든 주차에 관한 서비스 관리
 
 ## Spec 3
 
-주차장 요금 변경
-- TODO: 경차는 50% 할인
+### 주차장 요금표 변경 기능 구현
+- ParkingFee 속성을 통해 평소엔 WEEKDAY 요금 적용
+- WEEKEND 요금 적용시 다른 요금표 적용
+- 경차는 50% 할인 기능 구현
 - TODO: 트럭은 주차 불가
 
 

@@ -1,6 +1,7 @@
 package com.nhnacademy.exam.parkingservice;
 
 import com.nhnacademy.exam.car.Car;
+import com.nhnacademy.exam.car.CarType;
 import com.nhnacademy.exam.car.Currency;
 import com.nhnacademy.exam.car.Money;
 import java.time.Duration;
@@ -10,10 +11,17 @@ import java.util.Map;
 public class ParkingLotService {
     Map<String, Boolean> parkingSpace = new HashMap<>();
     ParkingLotRepository parkingLotRepository;
+    ParkingFee parkingFee = new ParkingFee(ParkingFeeStatus.WEEKDAY);
 
     public ParkingLotService(ParkingLotRepository parkingLotRepository) {
         this.parkingLotRepository = parkingLotRepository;
     }
+
+    public ParkingLotService(ParkingLotRepository parkingLotRepository, ParkingFee parkingFee) {
+        this.parkingLotRepository = parkingLotRepository;
+        this.parkingFee = parkingFee;
+    }
+
 
     public void scanCarNumber(Car car) {
         this.parkingLotRepository.saveCarInfo(car);
@@ -36,13 +44,47 @@ public class ParkingLotService {
 
     public int chargeParkingFeeToCar(Car car) {
         Duration duration = parkingLotRepository.getHowLongCarIsParked(car);
-        int amount = calculateParkingFeeOfCar(duration);
+        if (this.parkingFee.getStatus() == ParkingFeeStatus.WEEKDAY) {
+            int amount = calculateParkingFeeOfCarWeekday(duration);
+            Money money = new Money(Currency.WON, amount);
+            car.payMoney(money);
+            return amount;
+        }
+
+        int amount = calculateParkingFeeOfCarWeekend(duration);
+        if (car.getCarType() == CarType.LIGHTCAR) {
+            try {
+                amount = amount / 2;
+            } catch (ArithmeticException e) {
+                System.out.println("0인 경우는 어쩔수 없음");
+            }
+        }
         Money money = new Money(Currency.WON, amount);
         car.payMoney(money);
         return amount;
     }
 
-    private int calculateParkingFeeOfCar(Duration duration) {
+    private int calculateParkingFeeOfCarWeekend(Duration duration) {
+        if (duration.getSeconds() <= 1800L) {
+            return 0;
+        }
+        if (duration.getSeconds() <= 3600L) {
+            return 1000;
+        }
+        if (duration.getSeconds() <= 20400) {
+            if (duration.getSeconds() % 600 > 0) {
+                return (int) (((duration.getSeconds() / 600) + 1) * 500) - 2000;
+            }
+            return (int) ((duration.getSeconds() / 600) * 500) - 2000;
+        }
+        if (duration.getSeconds() > 86400) {
+            int fee = (int) (duration.getSeconds() / 86400) * 15000;
+            return fee + 15000;
+        }
+        return 15000;
+    }
+
+    private int calculateParkingFeeOfCarWeekday(Duration duration) {
         if (duration.getSeconds() <= 1800L) {
             return 1000;
         }
