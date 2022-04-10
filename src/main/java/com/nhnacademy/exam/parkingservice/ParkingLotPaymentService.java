@@ -11,8 +11,8 @@ public class ParkingLotPaymentService {
     ParkingFee parkingFee;
 
     public static final int TENMINUTE = 600;
-    public static final Long THIRTYMINUTE = 1800L;
-    public static final Long ONEHOUR = 3600L;
+    public static final int THIRTYMINUTE = 1800;
+    public static final int ONEHOUR = 3600;
     public static final int ONEDAY = 86400;
 
     public ParkingLotPaymentService(ParkingLotRepository parkingLotRepository,
