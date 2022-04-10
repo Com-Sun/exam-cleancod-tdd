@@ -10,6 +10,11 @@ public class ParkingLotPaymentService {
     ParkingLotRepository parkingLotRepository;
     ParkingFee parkingFee;
 
+    public static final int TENMINUTE = 600;
+    public static final Long THIRTYMINUTE = 1800L;
+    public static final Long ONEHOUR = 3600L;
+    public static final int ONEDAY = 86400;
+
     public ParkingLotPaymentService(ParkingLotRepository parkingLotRepository,
                                     ParkingFee parkingFee) {
         this.parkingLotRepository = parkingLotRepository;
@@ -52,37 +57,37 @@ public class ParkingLotPaymentService {
     }
 
     private int calculateParkingFeeOfCarWeekend(Duration duration) {
-        if (duration.getSeconds() <= 1800L) {
+        if (duration.getSeconds() <= THIRTYMINUTE) {
             return 0;
         }
-        if (duration.getSeconds() <= 3600L) {
+        if (duration.getSeconds() <= ONEHOUR) {
             return 1000;
         }
-        if (duration.getSeconds() <= 20400) {
-            if (duration.getSeconds() % 600 > 0) {
-                return (int) (((duration.getSeconds() / 600) + 1) * 500) - 2000;
+        if (duration.getSeconds() <= TENMINUTE * 34) {
+            if (duration.getSeconds() % TENMINUTE > 0) {
+                return (int) (((duration.getSeconds() / TENMINUTE) + 1) * 500) - 2000;
             }
-            return (int) ((duration.getSeconds() / 600) * 500) - 2000;
+            return (int) ((duration.getSeconds() / TENMINUTE) * 500) - 2000;
         }
-        if (duration.getSeconds() > 86400) {
-            int fee = (int) (duration.getSeconds() / 86400) * 15000;
+        if (duration.getSeconds() > ONEDAY) {
+            int fee = (int) (duration.getSeconds() / ONEDAY) * 15000;
             return fee + 15000;
         }
         return 15000;
     }
 
     private int calculateParkingFeeOfCarWeekday(Duration duration) {
-        if (duration.getSeconds() <= 1800L) {
+        if (duration.getSeconds() <= THIRTYMINUTE) {
             return 1000;
         }
-        if (duration.getSeconds() <= 5400L) {
-            if (duration.getSeconds() % 600 > 0) {
-                return (int) (((duration.getSeconds() / 600) + 1) * 500) - 500;
+        if (duration.getSeconds() <= THIRTYMINUTE * 3) {
+            if (duration.getSeconds() % TENMINUTE > 0) {
+                return (int) (((duration.getSeconds() / TENMINUTE) + 1) * 500) - 500;
             }
-            return (int) ((duration.getSeconds() / 600) * 500) - 500;
+            return (int) ((duration.getSeconds() / TENMINUTE) * 500) - 500;
         }
-        if (duration.getSeconds() > 86400) {
-            int fee = (int) (duration.getSeconds() / 86400) * 10000;
+        if (duration.getSeconds() > ONEDAY) {
+            int fee = (int) (duration.getSeconds() / ONEDAY) * 10000;
             return fee + 10000;
         }
         return 10000;
