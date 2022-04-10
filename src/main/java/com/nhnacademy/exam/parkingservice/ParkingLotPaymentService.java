@@ -4,16 +4,18 @@ import com.nhnacademy.exam.car.CarType;
 import com.nhnacademy.exam.car.Currency;
 import com.nhnacademy.exam.car.Money;
 import com.nhnacademy.exam.car.User;
+import com.nhnacademy.exam.paycoserver.PaycoServer;
 import java.time.Duration;
 
 public class ParkingLotPaymentService {
-    ParkingLotRepository parkingLotRepository;
-    ParkingFee parkingFee;
-
     public static final int TENMINUTE = 600;
     public static final int THIRTYMINUTE = 1800;
     public static final int ONEHOUR = 3600;
     public static final int ONEDAY = 86400;
+
+    ParkingLotRepository parkingLotRepository;
+    ParkingFee parkingFee;
+    PaycoServer paycoServer;
 
     public ParkingLotPaymentService(ParkingLotRepository parkingLotRepository,
                                     ParkingFee parkingFee) {
@@ -21,18 +23,19 @@ public class ParkingLotPaymentService {
         this.parkingFee = parkingFee;
     }
 
+    public ParkingLotPaymentService(
+        ParkingLotRepository parkingLotRepository,
+        ParkingFee parkingFee, PaycoServer paycoServer) {
+        this.parkingLotRepository = parkingLotRepository;
+        this.parkingFee = parkingFee;
+        this.paycoServer = paycoServer;
+    }
+
     public int chargeParkingFeeToUser(User user) {
         Duration duration = parkingLotRepository.getHowLongCarIsParked(user.getCar());
         if (this.parkingFee.getStatus() == ParkingFeeStatus.WEEKDAY) {
             int amount = calculateParkingFeeOfCarWeekday(duration);
-            Money money = new Money(Currency.WON, amount);
-            user.payMoney(money);
-            try {
-                String code = parkingLotRepository.carParkedSpaceInfo.get(user.getCar());
-                parkingLotRepository.parkingSpace.put(code, true);
-            } catch (NullPointerException e) {
-            }
-            return amount;
+            return makeUserPayMoneyAndReturnIntAmount(user, amount);
         }
 
         int amount = calculateParkingFeeOfCarWeekend(duration);
@@ -43,17 +46,21 @@ public class ParkingLotPaymentService {
                 System.out.println("0인 경우는 어쩔수 없음");
             }
         }
-        Money money = new Money(Currency.WON, amount);
-        user.payMoney(money);
+        return makeUserPayMoneyAndReturnIntAmount(user, amount);
+    }
 
+    private int makeUserPayMoneyAndReturnIntAmount(User user, int amount) {
+        Money money = new Money(Currency.WON, amount);
+        if (paycoServer.checkIsUserValid(user)) {
+            money = new Money(Currency.WON, (amount * 90) / 100);
+        }
+        user.payMoney(money);
         try {
             String code = parkingLotRepository.carParkedSpaceInfo.get(user.getCar());
             parkingLotRepository.parkingSpace.put(code, true);
-
         } catch (NullPointerException e) {
-
         }
-        return amount;
+        return money.getAmount();
     }
 
     private int calculateParkingFeeOfCarWeekend(Duration duration) {

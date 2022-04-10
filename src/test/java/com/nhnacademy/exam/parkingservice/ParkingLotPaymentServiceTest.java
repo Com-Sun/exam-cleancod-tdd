@@ -11,6 +11,7 @@ import com.nhnacademy.exam.car.Currency;
 import com.nhnacademy.exam.car.Money;
 import com.nhnacademy.exam.car.User;
 import com.nhnacademy.exam.exceptions.UserDoesNotHaveEnoughMoneyException;
+import com.nhnacademy.exam.paycoserver.PaycoServer;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.*;
@@ -26,7 +27,7 @@ class ParkingLotPaymentServiceTest {
     @BeforeEach
     void setUp() {
         parkingLotRepository = mock(ParkingLotRepository.class);
-        this.parkingLotPaymentService = new ParkingLotPaymentService(parkingLotRepository, parkingFee);
+        this.parkingLotPaymentService = new ParkingLotPaymentService(parkingLotRepository, parkingFee, new PaycoServer());
         car = new Car(CarType.SUV, 1838);
         user = new User(car, new Money(Currency.WON, 50000), "PAYCO");
     }

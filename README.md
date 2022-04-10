@@ -7,6 +7,7 @@
 ## ParkingLotPaymentService
 
 - 결제에 관한 기능을 제공한다
+- PaycoServer, ParkingFee, ParkingLotRepository에 의존한다.
 
 ## ParkingLotRepository
 
@@ -35,14 +36,14 @@
 
 ## Spec 2
 
-- TODO: 쓰레드를 사용하여 동시성을 구현하라..?
-- 위가 힘들면 강제로 n번째 입구로 보내버려라..?
+scan() / chargeParkingFeeToUser() 메서드가 동시에 입구 / 출구 갯수보다 많이 실행될 수 없음.
 
-### 주차장 입구가 n개입니다.
-- ??
+### 주차장 입구가 3개입니다.
 
-### 주차장 출구가 n개입니다.
-- ??
+- ParkingLotParkingService에서 Scan메서드가 동시에 4번 이상 발생시 Throw CarCannotEnterOverEntranceNumber 기능 구현
+
+### 주차장 출구가 3개입니다.
+- `TODO: ParkingLotPaymentService에서 요금계산 메서드가 동시에 4번 이상 발생시 Throw Exception`
 
 
 ## Spec 3
@@ -51,18 +52,17 @@
 - ParkingFee 속성을 통해 평소엔 WEEKDAY 요금 적용
 - WEEKEND 요금 적용시 다른 요금표 적용
 - 경차는 50% 할인 기능 구현
-- 트럭 타입 Car객체가 처음 Scan 될 시 Throw Exception 기능 구현
+- 트럭 타입 Car객체가 처음 Scan 될 시 Throw Exception 기능 구현 (트럭 주차 불가)
 
 
 ## Spec4
 
 ### 사용자가 Payco 회원일 경우 주차요금이 10% 할인
 
-- TODO: Payco 회원 인증 테스트
-- TODO: 회원 인증 시 주차요금 10% 할인
-- TODO: Payco 인증이 안될 경우, 나머지 모두 다 익명사용자
-- TODO: 익명사용자의 경우 할인혜택 없음
+- Payco 서버는 Mocking
+- 회원 인증 성공시 주차요금 10% 할인기능 구현
+- Payco 인증이 안될 경우, 할인 적용 없이 요금 청구 기능 구현
 
 ### 시간주차권 존재
 
-- TODO: 주차권 기능 구현
+- `TODO: 주차권 기능 구현`

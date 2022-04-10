@@ -8,13 +8,14 @@ import com.nhnacademy.exam.car.CarType;
 import com.nhnacademy.exam.car.Currency;
 import com.nhnacademy.exam.car.Money;
 import com.nhnacademy.exam.car.User;
+import com.nhnacademy.exam.paycoserver.PaycoServer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class CarExitTest {
     ParkingLotRepository parkingLotRepository = new ParkingLotRepository();
     ParkingLotParkingService parkingLotParkingService = new ParkingLotParkingService(parkingLotRepository);
-    ParkingLotPaymentService parkingLotPaymentService = new ParkingLotPaymentService(parkingLotRepository, new ParkingFee(ParkingFeeStatus.WEEKDAY));
+    ParkingLotPaymentService parkingLotPaymentService = new ParkingLotPaymentService(parkingLotRepository, new ParkingFee(ParkingFeeStatus.WEEKDAY), new PaycoServer());
     Car car = new Car(CarType.SUV, 1942);
     User user = new User(car, new Money(Currency.WON, 50000), "PAYCO");
 
