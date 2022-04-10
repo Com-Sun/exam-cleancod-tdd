@@ -7,6 +7,7 @@
 ## ParkingLotPaymentService
 
 - 결제에 관한 기능을 제공한다
+- PaycoServer, ParkingFee, ParkingLotRepository에 의존한다.
 
 ## ParkingLotRepository
 
@@ -51,17 +52,16 @@
 - ParkingFee 속성을 통해 평소엔 WEEKDAY 요금 적용
 - WEEKEND 요금 적용시 다른 요금표 적용
 - 경차는 50% 할인 기능 구현
-- 트럭 타입 Car객체가 처음 Scan 될 시 Throw Exception 기능 구현
+- 트럭 타입 Car객체가 처음 Scan 될 시 Throw Exception 기능 구현 (트럭 주차 불가)
 
 
 ## Spec4
 
 ### 사용자가 Payco 회원일 경우 주차요금이 10% 할인
 
-- TODO: Payco 회원 인증 테스트
-- TODO: 회원 인증 시 주차요금 10% 할인
-- TODO: Payco 인증이 안될 경우, 나머지 모두 다 익명사용자
-- TODO: 익명사용자의 경우 할인혜택 없음
+- Payco 서버는 Mocking
+- 회원 인증 성공시 주차요금 10% 할인기능 구현
+- Payco 인증이 안될 경우, 할인 적용 없이 요금 청구 기능 구현
 
 ### 시간주차권 존재
 
