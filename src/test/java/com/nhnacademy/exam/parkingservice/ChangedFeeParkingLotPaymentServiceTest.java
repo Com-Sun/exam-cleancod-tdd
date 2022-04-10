@@ -8,6 +8,7 @@ import com.nhnacademy.exam.car.CarType;
 import com.nhnacademy.exam.car.Currency;
 import com.nhnacademy.exam.car.Money;
 import com.nhnacademy.exam.car.User;
+import com.nhnacademy.exam.paycoserver.PaycoServer;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.*;
@@ -21,7 +22,7 @@ public class ChangedFeeParkingLotPaymentServiceTest {
     @BeforeEach
     void setUp(){
         parkingLotRepository = mock(ParkingLotRepository.class);
-        parkingLotPaymentService = new ParkingLotPaymentService(parkingLotRepository, new ParkingFee(ParkingFeeStatus.WEEKEND));
+        parkingLotPaymentService = new ParkingLotPaymentService(parkingLotRepository, new ParkingFee(ParkingFeeStatus.WEEKEND), new PaycoServer());
     }
 
     @DisplayName("주차장 요금 status가 제대로 변경되는지 확인")
@@ -41,7 +42,7 @@ public class ChangedFeeParkingLotPaymentServiceTest {
                 LocalDateTime.of(0, 1, 1, 0, 30)));
         assertThat(charge).isEqualTo(0);
 
-        parkingLotPaymentService = new ParkingLotPaymentService(parkingLotRepository, new ParkingFee(ParkingFeeStatus.WEEKDAY));
+        parkingLotPaymentService = new ParkingLotPaymentService(parkingLotRepository, new ParkingFee(ParkingFeeStatus.WEEKDAY), new PaycoServer());
 
         int charge2 = parkingLotPaymentService.chargeParkingFeeToUser(user);
         assertThat(charge2).isEqualTo(1000);

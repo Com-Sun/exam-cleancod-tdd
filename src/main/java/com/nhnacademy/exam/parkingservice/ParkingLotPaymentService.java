@@ -8,14 +8,14 @@ import com.nhnacademy.exam.paycoserver.PaycoServer;
 import java.time.Duration;
 
 public class ParkingLotPaymentService {
-    ParkingLotRepository parkingLotRepository;
-    ParkingFee parkingFee;
-    PaycoServer paycoServer;
-
     public static final int TENMINUTE = 600;
     public static final int THIRTYMINUTE = 1800;
     public static final int ONEHOUR = 3600;
     public static final int ONEDAY = 86400;
+
+    ParkingLotRepository parkingLotRepository;
+    ParkingFee parkingFee;
+    PaycoServer paycoServer;
 
     public ParkingLotPaymentService(ParkingLotRepository parkingLotRepository,
                                     ParkingFee parkingFee) {

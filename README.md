@@ -36,14 +36,14 @@
 
 ## Spec 2
 
-- TODO: 쓰레드를 사용하여 동시성을 구현하라..?
-- 위가 힘들면 강제로 n번째 입구로 보내버려라..?
+scan() / chargeParkingFeeToUser() 메서드가 동시에 입구 / 출구 갯수보다 많이 실행될 수 없음.
 
-### 주차장 입구가 n개입니다.
-- ??
+### 주차장 입구가 3개입니다.
 
-### 주차장 출구가 n개입니다.
-- ??
+- ParkingLotParkingService에서 Scan메서드가 동시에 4번 이상 발생시 Throw CarCannotEnterOverEntranceNumber 기능 구현
+
+### 주차장 출구가 3개입니다.
+- `TODO: ParkingLotPaymentService에서 요금계산 메서드가 동시에 4번 이상 발생시 Throw Exception`
 
 
 ## Spec 3
@@ -65,4 +65,4 @@
 
 ### 시간주차권 존재
 
-- TODO: 주차권 기능 구현
+- `TODO: 주차권 기능 구현`
