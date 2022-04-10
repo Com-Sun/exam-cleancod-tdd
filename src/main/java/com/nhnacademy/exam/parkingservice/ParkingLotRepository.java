@@ -9,9 +9,9 @@ import java.util.Map;
 public class ParkingLotRepository {
     Map<Car, LocalDateTime> carParkedTimeInfo = new HashMap<>();
     Map<Car, String> carParkedSpaceInfo = new HashMap<>();
+    Map<String, Boolean> parkingSpace = new HashMap<>();
 
     public int getCarNumber(Car car) {
-        //TODO: 레포지토리에서 일치하는 번호판을 찾아 리턴
         return car.getCarNumber();
     }
 

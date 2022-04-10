@@ -1,28 +1,22 @@
 # 개요
 
-## ParkingLotService
+## ParkingLotParkingService
 
-- parkingSpace: 주차공간을 관리하는 Map<String, Boolean>타입 속성
-- parkingLotRepository: 외부에서 주입
+- 주차에 관한 기능을 제공한다
 
----
+## ParkingLotPaymentService
 
-ParkingLotService에서 모든 주차에 관한 서비스 관리
-
-- scanCarNumber()
-- trackWhereCarIsParked()
-- isParkingSpaceAvailable()
-- chargeParkingFeeToCar()
-  - calculateParkingFeeOfCar()
+- 결제에 관한 기능을 제공한다
 
 ## ParkingLotRepository
 
-- carInfo: 주차된 차의 정보를 관리하는 Map<Car, LocalDateTime>타입 속성
+- carParkedTimeInfo: 주차된 차의 시간정보를 관리하는 Map<Car, LocalDateTime>타입 속성
+- carParkedSpaceInfe: 주차된 차의 공간정보를 관리하는 Map<Car, String>타입 속성
+- parkingSpace: 주차 공간이 사용 가능한지를 관리하는 Map<String, Boolean>타입 속성
+
 ---
 
-- getCarNumber()
-- saveCarInfo()
-- getHowLongCarIsParked()
+- 주차된 차의 모든 정보를 관리한다.
 
 
 # 기능 구현
@@ -36,7 +30,7 @@ ParkingLotService에서 모든 주차에 관한 서비스 관리
   - 아니라면 A-1을 사용중인 상태로 만드는 기능 구현
 ### 주차장에서 차가 나간다.
   - 주차한 시간만큼 요금표에 따른 fee 청구 기능 구현
-  - Car가 돈이 없을 시 Throw Exception 기능 구현 (나갈 수 없음)
+  - User가 돈이 없을 시 Throw Exception 기능 구현 (나갈 수 없음)
   - 사용중이던 주차공간을 사용할 수 있는상태로 변경 기능 구현
 
 ## Spec 2
@@ -53,12 +47,22 @@ ParkingLotService에서 모든 주차에 관한 서비스 관리
 
 ## Spec 3
 
-주차장 요금 변경
-- TODO: 경차는 50% 할인
-- TODO: 트럭은 주차 불가
+### 주차장 요금표 변경 기능 구현
+- ParkingFee 속성을 통해 평소엔 WEEKDAY 요금 적용
+- WEEKEND 요금 적용시 다른 요금표 적용
+- 경차는 50% 할인 기능 구현
+- 트럭 타입 Car객체가 처음 Scan 될 시 Throw Exception 기능 구현
 
 
 ## Spec4
 
-- Payco인증서버를 만든 뒤 목킹
-- Parameterized Test 를 사용해 볼 것
+### 사용자가 Payco 회원일 경우 주차요금이 10% 할인
+
+- TODO: Payco 회원 인증 테스트
+- TODO: 회원 인증 시 주차요금 10% 할인
+- TODO: Payco 인증이 안될 경우, 나머지 모두 다 익명사용자
+- TODO: 익명사용자의 경우 할인혜택 없음
+
+### 시간주차권 존재
+
+- TODO: 주차권 기능 구현
