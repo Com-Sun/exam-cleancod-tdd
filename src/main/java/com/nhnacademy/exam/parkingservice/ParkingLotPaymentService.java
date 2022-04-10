@@ -10,7 +10,8 @@ public class ParkingLotPaymentService {
     ParkingLotRepository parkingLotRepository;
     ParkingFee parkingFee;
 
-    public ParkingLotPaymentService(ParkingLotRepository parkingLotRepository, ParkingFee parkingFee) {
+    public ParkingLotPaymentService(ParkingLotRepository parkingLotRepository,
+                                    ParkingFee parkingFee) {
         this.parkingLotRepository = parkingLotRepository;
         this.parkingFee = parkingFee;
     }
@@ -21,6 +22,13 @@ public class ParkingLotPaymentService {
             int amount = calculateParkingFeeOfCarWeekday(duration);
             Money money = new Money(Currency.WON, amount);
             car.payMoney(money);
+            try {
+                String code = parkingLotRepository.carParkedSpaceInfo.get(car);
+                parkingLotRepository.parkingSpace.put(code, true);
+            } catch (NullPointerException e) {
+
+            }
+
             return amount;
         }
 
@@ -34,6 +42,14 @@ public class ParkingLotPaymentService {
         }
         Money money = new Money(Currency.WON, amount);
         car.payMoney(money);
+
+        try {
+            String code = parkingLotRepository.carParkedSpaceInfo.get(car);
+            parkingLotRepository.parkingSpace.put(code, true);
+
+        } catch (NullPointerException e) {
+
+        }
         return amount;
     }
 

@@ -2,21 +2,30 @@
 
 ## ParkingLotSystem
 
-- TODO: 구조 리펙터링
-- TODO: 각각의 서비스를 쪼개기
+- ParkingLotRepository에 의존
 
 ---
 
-ParkingLotService에서 모든 주차에 관한 서비스 관리
+- 주차에 관한 기능을 제공한다
+
+## ParkingLotPaymentService
+
+- ParkingLotRepository에 의존
+- ParkingFee에 의존
+
+---
+
+- 결제에 관한 기능을 제공한다
 
 ## ParkingLotRepository
 
 - carParkedTimeInfo: 주차된 차의 시간정보를 관리하는 Map<Car, LocalDateTime>타입 속성
 - carParkedSpaceInfe: 주차된 차의 공간정보를 관리하는 Map<Car, String>타입 속성
+- parkingSpace: 주차 공간이 사용 가능한지를 관리하는 Map<String, Boolean>타입 속성
 
 ---
 
-ParkingLotRepository에선 주차된 차에 관한 정보 관리
+- 주차된 차의 모든 정보를 관리한다.
 
 
 # 기능 구현

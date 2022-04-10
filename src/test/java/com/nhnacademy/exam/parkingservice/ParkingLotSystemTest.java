@@ -24,7 +24,7 @@ class ParkingLotSystemTest {
 
     @BeforeEach
     void setUp() {
-        parkingLotRepository = mock(ParkingLotRepository.class);
+        parkingLotRepository = new ParkingLotRepository();
         parkingLotSystem = new ParkingLotSystem(parkingLotRepository);
         car = new Car(CarType.SUV, 1838, new Money(Currency.WON, 50000));
     }
@@ -33,7 +33,6 @@ class ParkingLotSystemTest {
     @Test
     void carNumberScanTest() {
         parkingLotSystem.scanCarNumber(car);
-        when(parkingLotRepository.getCarNumber(car)).thenReturn(car.getCarNumber());
         assertThat(parkingLotRepository.getCarNumber(car)).isEqualTo(1838);
 
         // 메소드를 호출했는지

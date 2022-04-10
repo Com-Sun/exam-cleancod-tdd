@@ -11,7 +11,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.*;
 
-public class ChangedParkingLotPaymentServiceTest {
+public class ChangedFeeParkingLotPaymentServiceTest {
     ParkingLotPaymentService parkingLotPaymentService;
     ParkingLotRepository parkingLotRepository;
     Car car = new Car(CarType.SUV, 3953, new Money(Currency.WON, 50000));

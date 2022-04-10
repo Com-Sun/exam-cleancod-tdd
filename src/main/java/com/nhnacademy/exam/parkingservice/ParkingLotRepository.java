@@ -9,6 +9,7 @@ import java.util.Map;
 public class ParkingLotRepository {
     Map<Car, LocalDateTime> carParkedTimeInfo = new HashMap<>();
     Map<Car, String> carParkedSpaceInfo = new HashMap<>();
+    Map<String, Boolean> parkingSpace = new HashMap<>();
 
     public int getCarNumber(Car car) {
         return car.getCarNumber();
