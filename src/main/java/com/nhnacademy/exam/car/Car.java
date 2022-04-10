@@ -1,6 +1,6 @@
 package com.nhnacademy.exam.car;
 
-import com.nhnacademy.exam.parkingservice.CarDoesNotHaveEnoughMoneyException;
+import com.nhnacademy.exam.exceptions.CarDoesNotHaveEnoughMoneyException;
 
 public class Car {
     CarType carType;

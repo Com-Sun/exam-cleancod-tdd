@@ -25,7 +25,7 @@ public class ChangeParkingFeeTest {
 
     @DisplayName("주차장 요금 status가 제대로 변경되는지 확인")
     @Test
-    void doesParkingFeeChanges(){
+    void doesParkingFeeChangesTest(){
         assertThat(parkingLotService.parkingFee.getStatus()).isEqualTo(ParkingFeeStatus.WEEKDAY);
         parkingLotService = new ParkingLotService(parkingLotRepository, new ParkingFee(ParkingFeeStatus.WEEKEND));
         assertThat(parkingLotService.parkingFee.getStatus()).isEqualTo(ParkingFeeStatus.WEEKEND);
@@ -33,7 +33,7 @@ public class ChangeParkingFeeTest {
 
     @DisplayName("주차장 요금 변경 후 요금 청구가 제대로 되는지 확인 - 1시간 이하일 경우")
     @Test
-    void parkingFeeChanged() {
+    void parkingFeeChangedTest() {
         int charge = parkingLotService.chargeParkingFeeToCar(car);
         when(parkingLotRepository.getHowLongCarIsParked(car))
             .thenReturn(Duration.between(LocalDateTime.of(0, 1, 1, 0, 0),
@@ -48,7 +48,7 @@ public class ChangeParkingFeeTest {
 
     @DisplayName("1시간 1분일 경우")
     @Test
-    void parkingFeeChanged2() {
+    void parkingFeeChangedTest2() {
         when(parkingLotRepository.getHowLongCarIsParked(car))
             .thenReturn(Duration.between(LocalDateTime.of(0, 1, 1, 0, 0),
                 LocalDateTime.of(0, 1, 1, 1, 1)));
@@ -60,7 +60,7 @@ public class ChangeParkingFeeTest {
 
     @DisplayName(" 2시간 1분일 경우")
     @Test
-    void parkingFeeChanged3() {
+    void parkingFeeChangedTest3() {
         when(parkingLotRepository.getHowLongCarIsParked(car))
             .thenReturn(Duration.between(LocalDateTime.of(0, 1, 1, 0, 0),
                 LocalDateTime.of(0, 1, 1, 2, 1)));
@@ -72,7 +72,7 @@ public class ChangeParkingFeeTest {
 
     @DisplayName("일일 최대금액")
     @Test
-    void parkingFeeChanged4() {
+    void parkingFeeChangedTest4() {
         when(parkingLotRepository.getHowLongCarIsParked(car))
             .thenReturn(Duration.between(LocalDateTime.of(0, 1, 1, 0, 0),
                 LocalDateTime.of(0, 1, 2, 0, 0)));
@@ -84,7 +84,7 @@ public class ChangeParkingFeeTest {
 
     @DisplayName("이틀 연속 주차")
     @Test
-    void parkingFeeChanged5() {
+    void parkingFeeChangedTest5() {
         when(parkingLotRepository.getHowLongCarIsParked(car))
             .thenReturn(Duration.between(LocalDateTime.of(0, 1, 1, 0, 0),
                 LocalDateTime.of(0, 1, 2, 15, 0)));

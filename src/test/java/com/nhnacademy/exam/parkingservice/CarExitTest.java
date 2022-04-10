@@ -22,7 +22,6 @@ public class CarExitTest {
         parkingLotService.trackWhereCarIsParked(car, "A-1");
         assertThat(parkingLotService.isParkingSpaceAvailable("A-1")).isFalse();
         parkingLotService.chargeParkingFeeToCar(car);
-        parkingLotService.makeParkingSpaceAvailable(car);
         assertThat(parkingLotService.isParkingSpaceAvailable("A-1")).isTrue();
     }
 }

@@ -2,16 +2,15 @@ package com.nhnacademy.exam.parkingservice;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.nhnacademy.exam.car.Car;
 import com.nhnacademy.exam.car.CarType;
 import com.nhnacademy.exam.car.Currency;
 import com.nhnacademy.exam.car.Money;
+import com.nhnacademy.exam.exceptions.CarDoesNotHaveEnoughMoneyException;
+import com.nhnacademy.exam.exceptions.ParkingSpaceIsAlreadyUsedException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
@@ -105,7 +104,7 @@ class ParkingLotServiceTest {
 
     @DisplayName("Car가 돈이 없을 시 나갈 수 없음")
     @Test
-    void carCanNotExitIfMoneyIsNotEnough() {
+    void carCanNotExitIfMoneyIsNotEnoughTest() {
         Car poorCar = new Car(CarType.SUV, 1838, new Money(Currency.WON, 3000));
         when(parkingLotRepository.getHowLongCarIsParked(poorCar))
             .thenReturn(
@@ -113,4 +112,5 @@ class ParkingLotServiceTest {
         assertThatThrownBy(() -> parkingLotService.chargeParkingFeeToCar(poorCar))
             .isInstanceOf(CarDoesNotHaveEnoughMoneyException.class);
     }
+
 }

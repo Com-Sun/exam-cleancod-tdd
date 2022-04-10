@@ -11,7 +11,6 @@ public class ParkingLotRepository {
     Map<Car, String> carParkedSpaceInfo = new HashMap<>();
 
     public int getCarNumber(Car car) {
-        //TODO: 레포지토리에서 일치하는 번호판을 찾아 리턴
         return car.getCarNumber();
     }
 
