@@ -1,9 +1,9 @@
 package com.nhnacademy.exam.parkingservice;
 
-import com.nhnacademy.exam.car.Car;
 import com.nhnacademy.exam.car.CarType;
 import com.nhnacademy.exam.car.Currency;
 import com.nhnacademy.exam.car.Money;
+import com.nhnacademy.exam.car.User;
 import java.time.Duration;
 
 public class ParkingLotPaymentService {
@@ -16,24 +16,22 @@ public class ParkingLotPaymentService {
         this.parkingFee = parkingFee;
     }
 
-    public int chargeParkingFeeToCar(Car car) {
-        Duration duration = parkingLotRepository.getHowLongCarIsParked(car);
+    public int chargeParkingFeeToUser(User user) {
+        Duration duration = parkingLotRepository.getHowLongCarIsParked(user.getCar());
         if (this.parkingFee.getStatus() == ParkingFeeStatus.WEEKDAY) {
             int amount = calculateParkingFeeOfCarWeekday(duration);
             Money money = new Money(Currency.WON, amount);
-            car.payMoney(money);
+            user.payMoney(money);
             try {
-                String code = parkingLotRepository.carParkedSpaceInfo.get(car);
+                String code = parkingLotRepository.carParkedSpaceInfo.get(user.getCar());
                 parkingLotRepository.parkingSpace.put(code, true);
             } catch (NullPointerException e) {
-
             }
-
             return amount;
         }
 
         int amount = calculateParkingFeeOfCarWeekend(duration);
-        if (car.getCarType() == CarType.LIGHTCAR) {
+        if (user.getCar().getCarType() == CarType.LIGHTCAR) {
             try {
                 amount = amount / 2;
             } catch (ArithmeticException e) {
@@ -41,10 +39,10 @@ public class ParkingLotPaymentService {
             }
         }
         Money money = new Money(Currency.WON, amount);
-        car.payMoney(money);
+        user.payMoney(money);
 
         try {
-            String code = parkingLotRepository.carParkedSpaceInfo.get(car);
+            String code = parkingLotRepository.carParkedSpaceInfo.get(user.getCar());
             parkingLotRepository.parkingSpace.put(code, true);
 
         } catch (NullPointerException e) {

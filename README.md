@@ -1,19 +1,10 @@
 # 개요
 
-## ParkingLotSystem
-
-- ParkingLotRepository에 의존
-
----
+## ParkingLotParkingService
 
 - 주차에 관한 기능을 제공한다
 
 ## ParkingLotPaymentService
-
-- ParkingLotRepository에 의존
-- ParkingFee에 의존
-
----
 
 - 결제에 관한 기능을 제공한다
 
@@ -39,7 +30,7 @@
   - 아니라면 A-1을 사용중인 상태로 만드는 기능 구현
 ### 주차장에서 차가 나간다.
   - 주차한 시간만큼 요금표에 따른 fee 청구 기능 구현
-  - Car가 돈이 없을 시 Throw Exception 기능 구현 (나갈 수 없음)
+  - User가 돈이 없을 시 Throw Exception 기능 구현 (나갈 수 없음)
   - 사용중이던 주차공간을 사용할 수 있는상태로 변경 기능 구현
 
 ## Spec 2

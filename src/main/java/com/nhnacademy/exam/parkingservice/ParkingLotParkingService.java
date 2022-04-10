@@ -5,10 +5,10 @@ import com.nhnacademy.exam.car.CarType;
 import com.nhnacademy.exam.exceptions.ParkingSpaceIsAlreadyUsedException;
 import com.nhnacademy.exam.exceptions.TruckCanNotParkException;
 
-public class ParkingLotSystem {
+public class ParkingLotParkingService {
     ParkingLotRepository parkingLotRepository;
 
-    public ParkingLotSystem(ParkingLotRepository parkingLotRepository) {
+    public ParkingLotParkingService(ParkingLotRepository parkingLotRepository) {
         this.parkingLotRepository = parkingLotRepository;
     }
 
