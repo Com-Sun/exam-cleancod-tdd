@@ -1,7 +1,6 @@
 package com.nhnacademy.exam.parkingservice;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 import com.nhnacademy.exam.car.Car;
@@ -12,38 +11,39 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.*;
 
-public class ChangeParkingFeeTest {
-    ParkingLotService parkingLotService;
+public class ChangedParkingLotPaymentServiceTest {
+    ParkingLotPaymentService parkingLotPaymentService;
     ParkingLotRepository parkingLotRepository;
     Car car = new Car(CarType.SUV, 3953, new Money(Currency.WON, 50000));
+    ParkingFee parkingFee;
 
     @BeforeEach
     void setUp(){
         parkingLotRepository = mock(ParkingLotRepository.class);
-        parkingLotService = new ParkingLotService(parkingLotRepository);
+        parkingLotPaymentService = new ParkingLotPaymentService(parkingLotRepository, new ParkingFee(ParkingFeeStatus.WEEKEND));
     }
 
     @DisplayName("주차장 요금 status가 제대로 변경되는지 확인")
     @Test
     void doesParkingFeeChangesTest(){
-        assertThat(parkingLotService.parkingFee.getStatus()).isEqualTo(ParkingFeeStatus.WEEKDAY);
-        parkingLotService = new ParkingLotService(parkingLotRepository, new ParkingFee(ParkingFeeStatus.WEEKEND));
-        assertThat(parkingLotService.parkingFee.getStatus()).isEqualTo(ParkingFeeStatus.WEEKEND);
+        assertThat(parkingLotPaymentService.parkingFee.getStatus()).isEqualTo(ParkingFeeStatus.WEEKEND);
+        parkingLotPaymentService = new ParkingLotPaymentService(parkingLotRepository, new ParkingFee(ParkingFeeStatus.WEEKDAY));
+        assertThat(parkingLotPaymentService.parkingFee.getStatus()).isEqualTo(ParkingFeeStatus.WEEKDAY);
     }
 
-    @DisplayName("주차장 요금 변경 후 요금 청구가 제대로 되는지 확인 - 1시간 이하일 경우")
+    @DisplayName("주차장 요금 변경 후 요금 청구가 제대로 되는지 확인")
     @Test
     void parkingFeeChangedTest() {
-        int charge = parkingLotService.chargeParkingFeeToCar(car);
+        int charge = parkingLotPaymentService.chargeParkingFeeToCar(car);
         when(parkingLotRepository.getHowLongCarIsParked(car))
             .thenReturn(Duration.between(LocalDateTime.of(0, 1, 1, 0, 0),
                 LocalDateTime.of(0, 1, 1, 0, 30)));
-        assertThat(charge).isEqualTo(1000);
+        assertThat(charge).isEqualTo(0);
 
-        parkingLotService = new ParkingLotService(parkingLotRepository, new ParkingFee(ParkingFeeStatus.WEEKEND));
+        parkingLotPaymentService = new ParkingLotPaymentService(parkingLotRepository, new ParkingFee(ParkingFeeStatus.WEEKDAY));
 
-        int charge2 = parkingLotService.chargeParkingFeeToCar(car);
-        assertThat(charge2).isEqualTo(0);
+        int charge2 = parkingLotPaymentService.chargeParkingFeeToCar(car);
+        assertThat(charge2).isEqualTo(1000);
     }
 
     @DisplayName("1시간 1분일 경우")
@@ -52,9 +52,7 @@ public class ChangeParkingFeeTest {
         when(parkingLotRepository.getHowLongCarIsParked(car))
             .thenReturn(Duration.between(LocalDateTime.of(0, 1, 1, 0, 0),
                 LocalDateTime.of(0, 1, 1, 1, 1)));
-        parkingLotService = new ParkingLotService(parkingLotRepository, new ParkingFee(ParkingFeeStatus.WEEKEND));
-
-        int charge2 = parkingLotService.chargeParkingFeeToCar(car);
+        int charge2 = parkingLotPaymentService.chargeParkingFeeToCar(car);
         assertThat(charge2).isEqualTo(1500);
     }
 
@@ -64,9 +62,8 @@ public class ChangeParkingFeeTest {
         when(parkingLotRepository.getHowLongCarIsParked(car))
             .thenReturn(Duration.between(LocalDateTime.of(0, 1, 1, 0, 0),
                 LocalDateTime.of(0, 1, 1, 2, 1)));
-        parkingLotService = new ParkingLotService(parkingLotRepository, new ParkingFee(ParkingFeeStatus.WEEKEND));
 
-        int charge2 = parkingLotService.chargeParkingFeeToCar(car);
+        int charge2 = parkingLotPaymentService.chargeParkingFeeToCar(car);
         assertThat(charge2).isEqualTo(4500);
     }
 
@@ -76,9 +73,8 @@ public class ChangeParkingFeeTest {
         when(parkingLotRepository.getHowLongCarIsParked(car))
             .thenReturn(Duration.between(LocalDateTime.of(0, 1, 1, 0, 0),
                 LocalDateTime.of(0, 1, 2, 0, 0)));
-        parkingLotService = new ParkingLotService(parkingLotRepository, new ParkingFee(ParkingFeeStatus.WEEKEND));
 
-        int charge2 = parkingLotService.chargeParkingFeeToCar(car);
+        int charge2 = parkingLotPaymentService.chargeParkingFeeToCar(car);
         assertThat(charge2).isEqualTo(15000);
     }
 
@@ -88,9 +84,8 @@ public class ChangeParkingFeeTest {
         when(parkingLotRepository.getHowLongCarIsParked(car))
             .thenReturn(Duration.between(LocalDateTime.of(0, 1, 1, 0, 0),
                 LocalDateTime.of(0, 1, 2, 15, 0)));
-        parkingLotService = new ParkingLotService(parkingLotRepository, new ParkingFee(ParkingFeeStatus.WEEKEND));
 
-        int charge2 = parkingLotService.chargeParkingFeeToCar(car);
+        int charge2 = parkingLotPaymentService.chargeParkingFeeToCar(car);
         assertThat(charge2).isEqualTo(30000);
     }
 
@@ -101,9 +96,8 @@ public class ChangeParkingFeeTest {
         when(parkingLotRepository.getHowLongCarIsParked(lightCar))
             .thenReturn(Duration.between(LocalDateTime.of(0, 1, 1, 0, 0),
                 LocalDateTime.of(0, 1, 2, 15, 0)));
-        parkingLotService = new ParkingLotService(parkingLotRepository, new ParkingFee(ParkingFeeStatus.WEEKEND));
 
-        int lightCarCharge = parkingLotService.chargeParkingFeeToCar(lightCar);
+        int lightCarCharge = parkingLotPaymentService.chargeParkingFeeToCar(lightCar);
         assertThat(lightCarCharge).isEqualTo(15000);
     }
 
@@ -114,9 +108,8 @@ public class ChangeParkingFeeTest {
         when(parkingLotRepository.getHowLongCarIsParked(lightCar))
             .thenReturn(Duration.between(LocalDateTime.of(0, 1, 1, 0, 0),
                 LocalDateTime.of(0, 1, 1, 0, 1)));
-        parkingLotService = new ParkingLotService(parkingLotRepository, new ParkingFee(ParkingFeeStatus.WEEKEND));
 
-        int lightCarCharge = parkingLotService.chargeParkingFeeToCar(lightCar);
+        int lightCarCharge = parkingLotPaymentService.chargeParkingFeeToCar(lightCar);
         assertThat(lightCarCharge).isEqualTo(0);
     }
 }

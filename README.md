@@ -1,10 +1,9 @@
 # 개요
 
-## ParkingLotService
+## ParkingLotSystem
 
-- parkingSpace: 주차공간을 관리하는 Map<String, Boolean>타입 속성
-- ParkingLotRepository: 외부에서 주입
-- ParkingFee: 평소엔 WEEKDAY 요금제 적용. WEEKEND 요금으로 변경 가능
+- TODO: 구조 리펙터링
+- TODO: 각각의 서비스를 쪼개기
 
 ---
 
